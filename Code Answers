@@ -1,0 +1,126 @@
+
+14.Magic Potion Identifier
+using System;
+
+class Program
+{
+    public static string IsMagicalPotion(int power)
+    {
+        int cubeRoot = (int)Math.Round(Math.Pow(power, 1.0 / 3.0));
+        return cubeRoot * cubeRoot * cubeRoot == power ? "YES" : "NO";
+    }
+
+    static void Main(string[] args)
+    {
+        Console.WriteLine(IsMagicalPotion(27));  // Output: YES
+        Console.WriteLine(IsMagicalPotion(30));  // Output: NO
+    }
+}
+
+
+15 sNEAKY oUTCOMES
+
+using System;
+using System.Linq;
+
+class Program
+{
+    public static int[] FindDuplicates(int[] outcomes)
+    {
+        return outcomes.GroupBy(x => x)
+                       .Where(g => g.Count() == 2)
+                       .Select(g => g.Key)
+                       .ToArray();
+    }
+
+    static void Main(string[] args)
+    {
+        int[] outcomes = { 123456, 234567, 123347, 456789, 567890, 678901, 789012, 890123, 901234, 112233, 223344, 334455, 789012, 222234, 123347 };
+        int[] result = FindDuplicates(outcomes);
+        Console.WriteLine(string.Join(", ", result));  // Output: 123347, 789012
+    }
+}
+
+
+16.Reformat String to Alternating Case
+
+using System;
+using System.Text;
+
+class Program
+{
+    public static string ReformatString(string s)
+    {
+        StringBuilder result = new StringBuilder();
+        bool toggleCase = true;
+
+        foreach (char c in s)
+        {
+            if (char.IsLetter(c))
+            {
+                result.Append(toggleCase ? char.ToUpper(c) : char.ToLower(c));
+                toggleCase = !toggleCase;
+            }
+            else
+            {
+                result.Append(c);
+            }
+        }
+        return result.ToString();
+    }
+
+    static void Main(string[] args)
+    {
+        Console.WriteLine(ReformatString("Za^ B8g@E2jH*kWl!"));
+        // Output: "Z^ B8g@E2jH*kWl!"
+    }
+}
+
+
+17. Organizing Books into Identical Sets
+
+using System;
+using System.Linq;
+
+class Program
+{
+    // Function to compute the GCD of two numbers
+    public static int GCD(int a, int b)
+    {
+        while (b != 0)
+        {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    // Function to check if books can be organized into identical sets
+    public static string CanOrganizeBooks(int[] shelf)
+    {
+        var bookCount = shelf.GroupBy(x => x)
+                             .Select(g => g.Count())
+                             .ToList();
+
+        // Find the GCD of the frequencies
+        int gcd = bookCount[0];
+        foreach (var count in bookCount)
+        {
+            gcd = GCD(gcd, count);
+        }
+
+        // If the GCD is greater than 1, return YES, otherwise NO
+        return gcd > 1 ? "YES" : "NO";
+    }
+
+    static void Main(string[] args)
+    {
+        int[] shelf = new int[] { 1234567, 1234567, 2345678, 2345678, 3456789, 3456789, 1234567, 2345678, 3456789,
+                                  4567890, 4567890, 5678901, 5678901, 6789012, 6789012, 1234567, 2345678,
+                                  3456789, 4567890, 5678901, 4567890, 5678901 };
+
+        string result = CanOrganizeBooks(shelf);
+        Console.WriteLine(result);  // Output: YES
+    }
+}
